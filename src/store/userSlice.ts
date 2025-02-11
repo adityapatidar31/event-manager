@@ -4,7 +4,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface CounterState {
   name: string;
-  role: "user" | "guide" | "lead-guide" | "admin";
+  role: "user" | "admin";
   _id: string;
   email: string;
   photo: string;
@@ -12,7 +12,7 @@ interface CounterState {
 
 export interface User {
   name: string;
-  role: "user" | "guide" | "lead-guide" | "admin";
+  role: "user" | "admin";
   _id: string;
   email: string;
   photo?: string;

@@ -60,5 +60,5 @@ export async function createEvent(body: {
   date: string;
   location: string;
 }) {
-  await axios.post(`${BASE_URL}api/v1/users/signup`, body, cookieSender);
+  await axios.post(`${BASE_URL}api/v1/events`, body, cookieSender);
 }

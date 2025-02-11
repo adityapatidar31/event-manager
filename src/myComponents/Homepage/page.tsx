@@ -1,6 +1,7 @@
 import { NotebookText } from "lucide-react";
 import CardContainer from "./CardContainer";
 import { Separator } from "@/components/ui/separator";
+import FilterComponentByDate from "./FilterByDate";
 
 export default function HomePage() {
   return (
@@ -10,6 +11,9 @@ export default function HomePage() {
         <span>Events</span>
       </div>
       <Separator className="my-3" />
+      <div>
+        <FilterComponentByDate />
+      </div>
       <CardContainer />
     </>
   );

@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select";
 
 const dateFilters = [
+  { label: "All", value: "all" },
   { label: "Today", value: "today" },
   { label: "Next Week", value: "nextWeek" },
   { label: "Next Month", value: "nextMonth" },

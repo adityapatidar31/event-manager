@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { RootState } from "@/store/store";
 import { joinEvent, leaveEvent } from "@/store/eventSlice";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +10,16 @@ import { BASE_URL, cookieSender } from "@/services/backend";
 import LoadingCardContainer from "./LoadingCardContainer";
 import { Button } from "@/components/ui/button";
 import { socket } from "@/services/socket";
-import { useSearchParams } from "react-router-dom";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 interface Event {
   _id: string;
@@ -28,38 +37,30 @@ interface Event {
 
 function CardContainer() {
   const dispatch = useDispatch();
-  const joinedEvent = useSelector((state: RootState) => state.event);
-  const [searchParams] = useSearchParams();
+  const joinedEvent = useSelector((state: RootState) => state.event); // Get joined event
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [attendeeCounts, setAttendeeCounts] = useState<{
     [key: string]: number;
   }>({});
+  const [showDialog, setShowDialog] = useState(false);
+  const [pendingEvent, setPendingEvent] = useState<Event | null>(null);
 
   useEffect(() => {
     async function getAllEvents() {
-      const search = searchParams.get("search");
       setIsLoading(true);
       try {
-        if (search) {
-          const res = await axios.get(
-            `${BASE_URL}api/v1/events?search=${search}`,
-            cookieSender
-          );
-          setEvents(res.data?.data);
-        } else {
-          const res = await axios.get(`${BASE_URL}api/v1/events`, cookieSender);
-          setEvents(res.data?.data);
-        }
+        const res = await axios.get(`${BASE_URL}api/v1/events`, cookieSender);
+        setEvents(res.data?.data);
       } catch {
-        console.log("There is an error fetching events");
+        console.log("Error fetching events");
       } finally {
         setIsLoading(false);
       }
     }
 
     getAllEvents();
-  }, [searchParams]);
+  }, []);
 
   useEffect(() => {
     socket.connect();
@@ -78,24 +79,32 @@ function CardContainer() {
 
   // Handle joining an event
   const handleJoinEvent = (event: Event) => {
-    if (joinedEvent._id) {
-      alert(
-        `You have already joined "${joinedEvent.name}". Please leave it first.`
-      );
+    if (joinedEvent._id && joinedEvent._id !== event._id) {
+      // If already in an event, show dialog
+      setPendingEvent(event);
+      setShowDialog(true);
       return;
     }
 
-    // Join the event
+    // If not in any event, join directly
     socket.emit("joinEvent", event._id);
-    dispatch(joinEvent(event)); // Update Redux store
+    dispatch(joinEvent(event));
   };
 
-  // Handle leaving an event
-  const handleLeaveEvent = () => {
-    if (!joinedEvent._id) return;
+  // Handle leaving and joining a new event
+  const confirmLeaveAndJoin = () => {
+    if (joinedEvent._id) {
+      socket.emit("leaveEvent", joinedEvent._id);
+      dispatch(leaveEvent());
+    }
 
-    socket.emit("leaveEvent", joinedEvent._id);
-    dispatch(leaveEvent()); // Remove from Redux store
+    if (pendingEvent) {
+      socket.emit("joinEvent", pendingEvent._id);
+      dispatch(joinEvent(pendingEvent));
+      setPendingEvent(null);
+    }
+
+    setShowDialog(false);
   };
 
   if (isLoading) {
@@ -115,8 +124,7 @@ function CardContainer() {
             className="rounded-xl shadow-lg hover:shadow-xl transition"
           >
             <img
-              src="https://images.unsplash.com/photo-1739036462754-6e86520998a2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw0fHx8ZW58MHx8fHx8"
-              // src={event.image}
+              src={event.image}
               alt={event.name}
               className="w-full sm:h-50 h-45 object-cover rounded-t-xl"
             />
@@ -151,7 +159,10 @@ function CardContainer() {
               {joinedEvent._id === event._id ? (
                 <Button
                   className="mt-4 w-full bg-red-500 hover:bg-red-600"
-                  onClick={handleLeaveEvent}
+                  onClick={() => {
+                    socket.emit("leaveEvent", joinedEvent._id);
+                    dispatch(leaveEvent());
+                  }}
                 >
                   Leave Event
                 </Button>
@@ -167,6 +178,28 @@ function CardContainer() {
           </Card>
         ))}
       </div>
+
+      {/* Alert Dialog for Switching Events */}
+      <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Leave Current Event?</AlertDialogTitle>
+            <AlertDialogDescription>
+              You have already joined "<strong>{joinedEvent.name}</strong>". Do
+              you want to leave it and join "
+              <strong>{pendingEvent?.name}</strong>" instead?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowDialog(false)}>
+              OK
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={confirmLeaveAndJoin}>
+              Leave Last & Join
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -39,7 +39,7 @@ export default function Navbar() {
     <>
       <nav className="w-full bg-background p-4 shadow-md">
         <div className="container mx-auto flex items-center justify-between">
-          <Link to="/home" className="text-xl font-bold text-violet-600">
+          <Link to="/home" className="text-xl font-bold text-primary">
             EventHub
           </Link>
 

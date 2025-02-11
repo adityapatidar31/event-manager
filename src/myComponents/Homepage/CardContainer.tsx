@@ -83,7 +83,8 @@ function CardContainer() {
             className="rounded-xl shadow-lg hover:shadow-xl transition"
           >
             <img
-              src={event.image}
+              // src={event.image}
+              src="https://images.unsplash.com/photo-1739036462754-6e86520998a2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw0fHx8ZW58MHx8fHx8"
               alt={event.name}
               className="w-full sm:h-50 h-45 object-cover rounded-t-xl"
             />

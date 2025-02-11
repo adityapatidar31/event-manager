@@ -1,5 +1,5 @@
-function Homepage() {
-  return <div>Home Page</div>;
-}
+import CardContainer from "./CardContainer";
 
-export default Homepage;
+export default function HomePage() {
+  return <CardContainer />;
+}

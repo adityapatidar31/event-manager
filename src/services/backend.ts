@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const cookieSender = {
+export const cookieSender = {
   withCredentials: true,
 };
 
-const BASE_URL = "https://event-manager-2u4t.onrender.com/";
+export const BASE_URL = "https://event-manager-2u4t.onrender.com/";
 
 export async function getUser() {
   const res = await axios.get(

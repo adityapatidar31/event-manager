@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { joinEvent, leaveEvent } from "@/store/eventSlice";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
@@ -7,6 +10,7 @@ import { BASE_URL, cookieSender } from "@/services/backend";
 import LoadingCardContainer from "./LoadingCardContainer";
 import { Button } from "@/components/ui/button";
 import { socket } from "@/services/socket";
+import { useSearchParams } from "react-router-dom";
 
 interface Event {
   _id: string;
@@ -23,6 +27,9 @@ interface Event {
 }
 
 function CardContainer() {
+  const dispatch = useDispatch();
+  const joinedEvent = useSelector((state: RootState) => state.event);
+  const [searchParams] = useSearchParams();
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [attendeeCounts, setAttendeeCounts] = useState<{
@@ -31,10 +38,19 @@ function CardContainer() {
 
   useEffect(() => {
     async function getAllEvents() {
+      const search = searchParams.get("search");
       setIsLoading(true);
       try {
-        const res = await axios.get(`${BASE_URL}api/v1/events`, cookieSender);
-        setEvents(res.data?.data);
+        if (search) {
+          const res = await axios.get(
+            `${BASE_URL}api/v1/events?search=${search}`,
+            cookieSender
+          );
+          setEvents(res.data?.data);
+        } else {
+          const res = await axios.get(`${BASE_URL}api/v1/events`, cookieSender);
+          setEvents(res.data?.data);
+        }
       } catch {
         console.log("There is an error fetching events");
       } finally {
@@ -43,12 +59,11 @@ function CardContainer() {
     }
 
     getAllEvents();
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     socket.connect();
 
-    // Listen for real-time attendee updates
     socket.on("attendeeUpdate", ({ eventId, count }) => {
       setAttendeeCounts((prevCounts) => ({
         ...prevCounts,
@@ -62,8 +77,25 @@ function CardContainer() {
   }, []);
 
   // Handle joining an event
-  const handleJoinEvent = (eventId: string) => {
-    socket.emit("joinEvent", eventId);
+  const handleJoinEvent = (event: Event) => {
+    if (joinedEvent._id) {
+      alert(
+        `You have already joined "${joinedEvent.name}". Please leave it first.`
+      );
+      return;
+    }
+
+    // Join the event
+    socket.emit("joinEvent", event._id);
+    dispatch(joinEvent(event)); // Update Redux store
+  };
+
+  // Handle leaving an event
+  const handleLeaveEvent = () => {
+    if (!joinedEvent._id) return;
+
+    socket.emit("leaveEvent", joinedEvent._id);
+    dispatch(leaveEvent()); // Remove from Redux store
   };
 
   if (isLoading) {
@@ -83,8 +115,8 @@ function CardContainer() {
             className="rounded-xl shadow-lg hover:shadow-xl transition"
           >
             <img
-              // src={event.image}
               src="https://images.unsplash.com/photo-1739036462754-6e86520998a2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw0fHx8ZW58MHx8fHx8"
+              // src={event.image}
               alt={event.name}
               className="w-full sm:h-50 h-45 object-cover rounded-t-xl"
             />
@@ -116,12 +148,21 @@ function CardContainer() {
                 <strong>Attendees: </strong>
                 {attendeeCounts[event._id] || 0}
               </p>
-              <Button
-                className="mt-4 w-full"
-                onClick={() => handleJoinEvent(event._id)}
-              >
-                Join
-              </Button>
+              {joinedEvent._id === event._id ? (
+                <Button
+                  className="mt-4 w-full bg-red-500 hover:bg-red-600"
+                  onClick={handleLeaveEvent}
+                >
+                  Leave Event
+                </Button>
+              ) : (
+                <Button
+                  className="mt-4 w-full"
+                  onClick={() => handleJoinEvent(event)}
+                >
+                  Join
+                </Button>
+              )}
             </CardContent>
           </Card>
         ))}

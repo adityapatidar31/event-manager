@@ -12,7 +12,8 @@ export default function HomePage() {
         <span>Events</span>
       </div>
       <Separator className="my-3" />
-      <div>
+
+      <div className="flex flex-col sm:flex-row justify-end sm:gap-3 gap-0  mr-4">
         <FilterComponentByDate />
         <SortByDateComponent />
       </div>

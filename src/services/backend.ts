@@ -50,3 +50,15 @@ export async function signUpUser(body: signBody): Promise<User> {
   );
   return res.data.data.user;
 }
+
+export async function createEvent(body: {
+  name: string;
+  description: string;
+  capacity: number;
+  category: string;
+  duration: number;
+  date: string;
+  location: string;
+}) {
+  await axios.post(`${BASE_URL}api/v1/users/signup`, body, cookieSender);
+}

@@ -21,7 +21,8 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import NoEventAvailable from "./EventNotFount";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAppSelector } from "@/services/hooks";
 
 interface Event {
   _id: string;
@@ -48,6 +49,9 @@ function CardContainer() {
   }>({});
   const [showDialog, setShowDialog] = useState(false);
   const [pendingEvent, setPendingEvent] = useState<Event | null>(null);
+  const navigate = useNavigate();
+
+  const { _id: userId } = useAppSelector((store) => store.user);
 
   useEffect(() => {
     async function getAllEvents() {
@@ -182,12 +186,16 @@ function CardContainer() {
                 >
                   Leave Event
                 </Button>
-              ) : (
+              ) : userId ? (
                 <Button
                   className="mt-4 w-full"
                   onClick={() => handleJoinEvent(event)}
                 >
                   Join
+                </Button>
+              ) : (
+                <Button className="mt-4 w-full" onClick={() => navigate("/")}>
+                  Login
                 </Button>
               )}
             </CardContent>

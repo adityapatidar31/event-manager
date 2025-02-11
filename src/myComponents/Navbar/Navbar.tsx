@@ -23,7 +23,7 @@ export default function Navbar() {
   useEffect(
     function () {
       async function fetchUser() {
-        // const user = await getUser();
+        const user = await getUser();
         if (user) dispatch(addUser(user));
       }
       fetchUser();

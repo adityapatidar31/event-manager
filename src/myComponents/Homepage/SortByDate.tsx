@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/select";
 
 const sortOptions = [
-  { label: "Newest First", value: "-date" },
-  { label: "Oldest First", value: "+date" },
+  { label: "Date: Newest First", value: "-date" },
+  { label: "Date: Oldest First", value: "+date" },
 ];
 
 function SortByDateComponent() {

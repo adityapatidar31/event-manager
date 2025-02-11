@@ -8,13 +8,13 @@ import {
 } from "@/components/ui/select";
 
 const dateFilters = [
-  { label: "All", value: "all" },
-  { label: "Today", value: "today" },
-  { label: "Next Week", value: "nextWeek" },
-  { label: "Next Month", value: "nextMonth" },
-  { label: "Next 3 Months", value: "nextThreeMonths" },
-  { label: "This Year", value: "thisYear" },
-  { label: "Next 3 Years", value: "nextThreeYears" },
+  { label: "Date: All", value: "all" },
+  { label: "Date: Today", value: "today" },
+  { label: "Date: Next Week", value: "nextWeek" },
+  { label: "Date: Next Month", value: "nextMonth" },
+  { label: "Date: Next 3 Months", value: "nextThreeMonths" },
+  { label: "Date: This Year", value: "thisYear" },
+  { label: "Date: Next 3 Years", value: "nextThreeYears" },
 ];
 
 function FilterComponentByDate() {

@@ -21,6 +21,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import NoEventAvailable from "./EventNotFount";
+import { useSearchParams } from "react-router-dom";
 
 interface Event {
   _id: string;
@@ -37,6 +38,7 @@ interface Event {
 }
 
 function CardContainer() {
+  const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const joinedEvent = useSelector((state: RootState) => state.event); // Get joined event
   const [events, setEvents] = useState<Event[]>([]);
@@ -51,7 +53,20 @@ function CardContainer() {
     async function getAllEvents() {
       setIsLoading(true);
       try {
-        const res = await axios.get(`${BASE_URL}api/v1/events`, cookieSender);
+        let filter = "?";
+        if (searchParams.get("search")) {
+          filter += `search=${searchParams.get("search")}&`;
+        }
+        if (searchParams.get("date")) {
+          filter += `date=${searchParams.get("date")}&`;
+        }
+        if (searchParams.get("sort")) {
+          filter += `sort=${searchParams.get("sort")}&`;
+        }
+        const res = await axios.get(
+          `${BASE_URL}api/v1/events/${filter}`,
+          cookieSender
+        );
         setEvents(res.data?.data);
       } catch {
         console.log("Error fetching events");
@@ -61,7 +76,7 @@ function CardContainer() {
     }
 
     getAllEvents();
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     socket.connect();

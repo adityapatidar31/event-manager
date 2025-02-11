@@ -4,7 +4,7 @@ export const cookieSender = {
   withCredentials: true,
 };
 
-export const BASE_URL = "https://event-manager--inky.vercel.app/";
+export const BASE_URL = "http://localhost:3000/";
 
 export async function getUser() {
   const res = await axios.get(

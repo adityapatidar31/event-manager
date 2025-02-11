@@ -86,7 +86,7 @@ export default function Navbar() {
                     <Link to="/signup">
                       <DropdownMenuItem>Signup</DropdownMenuItem>
                     </Link>
-                    <Link to="/home/about">
+                    <Link to="/about">
                       <DropdownMenuItem>About</DropdownMenuItem>
                     </Link>
                   </>

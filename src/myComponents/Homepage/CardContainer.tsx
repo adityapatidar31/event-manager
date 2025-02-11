@@ -20,6 +20,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import NoEventAvailable from "./EventNotFount";
 
 interface Event {
   _id: string;
@@ -112,7 +113,7 @@ function CardContainer() {
   }
 
   if (!events.length) {
-    return <p className="text-center text-gray-500">No events available.</p>;
+    return <NoEventAvailable />;
   }
 
   return (

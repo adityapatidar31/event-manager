@@ -15,7 +15,7 @@ export interface User {
   role: "user" | "admin";
   _id: string;
   email: string;
-  photo?: string;
+  photo: string;
 }
 
 // Define the initial state using that type
@@ -24,7 +24,7 @@ const initialState: CounterState = {
   role: "user",
   _id: "",
   email: "",
-  photo: "user.jpeg",
+  photo: "",
 };
 
 export const userSlice = createSlice({
@@ -38,11 +38,18 @@ export const userSlice = createSlice({
       state._id = _id;
       state.email = email;
       state.role = role;
-      state.photo = photo || state.photo;
+      state.photo = photo;
+    },
+    logoutUser(state) {
+      state.name = "";
+      state.role = "user";
+      state._id = "";
+      state.email = "";
+      state.photo = "";
     },
   },
 });
 
-export const { addUser } = userSlice.actions;
+export const { addUser, logoutUser } = userSlice.actions;
 
 export default userSlice.reducer;

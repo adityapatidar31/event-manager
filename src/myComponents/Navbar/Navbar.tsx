@@ -7,19 +7,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Cookies from "js-cookie";
 import { User } from "lucide-react";
 import ThemeSwitcher from "./ThemeSwitcher";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/services/hooks";
 
-import { addUser } from "@/store/userSlice";
+import { addUser, logoutUser } from "@/store/userSlice";
 import SearchInput from "./Search";
 import { getUser } from "@/services/backend";
+import { toast } from "react-toastify";
 
 export default function Navbar() {
   const user = useAppSelector((store) => store.user);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   useEffect(
     function () {
       async function fetchUser() {
@@ -32,7 +35,11 @@ export default function Navbar() {
   );
 
   function handleLogout() {
-    console.log("Logout successfully");
+    Cookies.remove("eventjwtcookie"); // Delete the auth cookie
+    dispatch(logoutUser()); // Clear Redux auth state
+    navigate("/login");
+
+    toast.success("Logout successfully");
   }
 
   return (
@@ -53,7 +60,10 @@ export default function Navbar() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="p-3">
                   {user.name ? (
-                    <img src={user.photo} className="w-7 h-7 rounded-lg" />
+                    <img
+                      src={user.photo || "defaultUser.jpg"}
+                      className="w-7 h-7 rounded-lg"
+                    />
                   ) : (
                     <User className="w-5 h-5" />
                   )}

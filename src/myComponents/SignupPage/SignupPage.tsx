@@ -126,7 +126,9 @@ const SignupPage = () => {
             <label
               htmlFor="photo"
               className="block text-sm font-medium text-foreground"
-            ></label>
+            >
+              Photo Url
+            </label>
             <Input
               id="photo"
               type="url"

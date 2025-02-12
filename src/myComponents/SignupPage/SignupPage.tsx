@@ -14,6 +14,7 @@ const SignupPage = () => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [isPending, setIsPending] = useState<boolean>(false);
+  const [photo, setPhoto] = useState<string>("");
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -25,7 +26,13 @@ const SignupPage = () => {
     }
     try {
       setIsPending(true);
-      const data = { email, password, passwordConfirm: confirmPassword, name };
+      const data = {
+        email,
+        password,
+        passwordConfirm: confirmPassword,
+        name,
+        photo,
+      };
       const user = await signUpUser(data);
       dispatch(addUser(user));
       setIsPending(false);
@@ -112,6 +119,21 @@ const SignupPage = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm password"
+              className="mt-2"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="photo"
+              className="block text-sm font-medium text-foreground"
+            ></label>
+            <Input
+              id="photo"
+              type="url"
+              required
+              value={photo}
+              onChange={(e) => setPhoto(e.target.value)}
+              placeholder="Enter your photo url"
               className="mt-2"
             />
           </div>

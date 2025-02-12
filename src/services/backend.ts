@@ -41,6 +41,7 @@ interface signBody {
   password: string;
   passwordConfirm: string;
   name: string;
+  photo: string;
 }
 
 export async function signUpUser(body: signBody): Promise<User> {

@@ -81,18 +81,34 @@ export default function EventForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 p-4 w-full max-w-2xl mx-auto bg-card shadow-md rounded-lg md:p-6"
+      className="space-y-4 p-4 w-full  max-w-screen-xl  bg-card shadow-md rounded-lg md:p-6"
     >
-      <div>
-        <Label htmlFor="name">Name</Label>
-        <Input
-          id="name"
-          required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full"
-        />
+      <div className="flex gap-5 flex-col sm:flex-row">
+        <div className="w-full">
+          <Label htmlFor="name">Name</Label>
+          <Input
+            id="name"
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full"
+          />
+        </div>
+
+        <div className="w-full">
+          <Label htmlFor="category">Category</Label>
+          <Select value={category} onValueChange={setCategory}>
+            <SelectTrigger id="category">Select category</SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Tech">Tech</SelectItem>
+              <SelectItem value="Music">Music</SelectItem>
+              <SelectItem value="Sports">Sports</SelectItem>
+              <SelectItem value="Education">Education</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
+
       <div>
         <Label htmlFor="description">Description</Label>
         <Textarea
@@ -103,76 +119,71 @@ export default function EventForm() {
           className="w-full"
         />
       </div>
-      <div>
-        <Label htmlFor="category">Category</Label>
-        <Select value={category} onValueChange={setCategory}>
-          <SelectTrigger id="category">Select category</SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Tech">Tech</SelectItem>
-            <SelectItem value="Music">Music</SelectItem>
-            <SelectItem value="Sports">Sports</SelectItem>
-            <SelectItem value="Education">Education</SelectItem>
-          </SelectContent>
-        </Select>
+
+      <div className="flex gap-5 flex-col sm:flex-row">
+        <div className="w-full flex gap-3 flex-col">
+          <Label>Capacity: {capacity}</Label>
+          <Slider
+            min={1}
+            max={500}
+            value={[capacity]}
+            onValueChange={(val) => setCapacity(val[0])}
+            className="w-full"
+          />
+        </div>
+        <div className="w-full flex gap-3 flex-col">
+          <Label>Duration (minutes): {duration}</Label>
+          <Slider
+            min={1}
+            max={300}
+            value={[duration]}
+            onValueChange={(val) => setDuration(val[0])}
+            className="w-full"
+          />
+        </div>
       </div>
-      <div>
-        <Label>Capacity: {capacity}</Label>
-        <Slider
-          min={1}
-          max={500}
-          value={[capacity]}
-          onValueChange={(val) => setCapacity(val[0])}
-          className="w-full"
-        />
-      </div>
-      <div>
-        <Label>Duration (minutes): {duration}</Label>
-        <Slider
-          min={1}
-          max={300}
-          value={[duration]}
-          onValueChange={(val) => setDuration(val[0])}
-          className="w-full"
-        />
-      </div>
-      <div>
-        <Label>Date</Label>
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-          className="w-full"
-        />
-      </div>
-      <div>
-        <Label htmlFor="time">Time</Label>
-        <Input
-          type="time"
-          id="time"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-          className="w-full"
-        />
-      </div>
-      <div>
-        <Label htmlFor="location">Location</Label>
-        <Input
-          id="location"
-          required
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          className="w-full"
-        />
-      </div>
-      <div>
-        <Label htmlFor="image">Image URL</Label>
-        <Input
-          id="image"
-          type="url"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-          className="w-full"
-        />
+      <div className="flex gap-5 flex-col sm:flex-row">
+        <div>
+          <Label className="pl-5">Date</Label>
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={setDate}
+            className="w-full"
+          />
+        </div>
+        <div className="w-full flex flex-col gap-6">
+          <div>
+            <Label htmlFor="time">Time</Label>
+            <Input
+              type="time"
+              id="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              className="w-full mt-2"
+            />
+          </div>
+          <div>
+            <Label htmlFor="location">Location</Label>
+            <Input
+              id="location"
+              required
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className="w-full  mt-2"
+            />
+          </div>
+          <div>
+            <Label htmlFor="image">Image URL</Label>
+            <Input
+              id="image"
+              type="url"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+              className="w-full  mt-2"
+            />
+          </div>
+        </div>
       </div>
       <Button type="submit" className="w-full" disabled={isPending}>
         {isPending ? <SyncLoader color="#fff" /> : "Create Event"}

@@ -19,6 +19,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import LoadingCardContainer from "../Homepage/LoadingCardContainer";
 
 interface Event {
   _id: string;
@@ -87,7 +88,7 @@ const MyEventComponent = () => {
       <h2 className="text-2xl font-semibold mb-4">My Events</h2>
 
       {loading ? (
-        <p>Loading events...</p>
+        <LoadingCardContainer />
       ) : events.length === 0 ? (
         <p className="text-gray-500">You haven't created any events yet.</p>
       ) : (

@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import HeroSection from "./myComponents/Heropage/Hero";
 import Homepage from "./myComponents/Homepage/page";
-import Eventpage from "./myComponents/Eventpage/Eventpage";
 import Aboutpage from "./myComponents/Aboutpage/Aboutpage";
 import CreateEvent from "./myComponents/CreateEventpage/CreateEvent";
 import Loginpage from "./myComponents/Loginpage/Loginpage";
@@ -52,8 +51,7 @@ export default function App() {
             {/* The HomePage is the default for /home */}
             <Route path="" element={<Homepage />} />
             {/* The dynamic route is defined as :id */}
-            <Route path="/:id" element={<Eventpage />} />
-            <Route path="/myEvent" element={<MyEventComponent />} />
+            <Route path="/myEvents" element={<MyEventComponent />} />
             <Route path="/about" element={<Aboutpage />} />
             <Route path="/createEvent" element={<CreateEvent />} />
           </Route>

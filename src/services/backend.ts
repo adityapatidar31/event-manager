@@ -20,6 +20,7 @@ interface User {
   email: string;
   role: "admin" | "user";
   __v: number;
+  photo: string;
 }
 
 export async function loginUser(data: {

@@ -11,7 +11,7 @@ export async function getUser() {
     `${BASE_URL}api/v1/users/isLogedIn`,
     cookieSender
   );
-  return res.data.user;
+  return res.data.data.user;
 }
 
 interface User {

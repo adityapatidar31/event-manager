@@ -194,7 +194,12 @@ function CardContainer() {
                   Join
                 </Button>
               ) : (
-                <Button className="mt-4 w-full" onClick={() => navigate("/")}>
+                <Button
+                  className="mt-4 w-full"
+                  onClick={() => {
+                    navigate("/");
+                  }}
+                >
                   Login
                 </Button>
               )}

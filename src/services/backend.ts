@@ -61,6 +61,7 @@ export async function createEvent(body: {
   duration: number;
   date: string;
   location: string;
+  image: string;
 }) {
   await axios.post(`${BASE_URL}api/v1/events`, body, cookieSender);
 }

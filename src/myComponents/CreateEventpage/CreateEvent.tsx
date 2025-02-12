@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { formatDateTime } from "@/services/utils";
 import { toast } from "react-toastify";
 import { createEvent } from "@/services/backend";
+import { SyncLoader } from "react-spinners";
 
 export default function EventForm() {
   const [date, setDate] = useState<Date | undefined>();
@@ -25,6 +26,7 @@ export default function EventForm() {
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
   const [image, setImage] = useState("");
+  const [isPending, setIsPending] = useState(false);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -52,12 +54,16 @@ export default function EventForm() {
       duration,
       date: modifiedDate,
       location,
+      image,
     };
     try {
+      setIsPending(true);
       await createEvent(body);
     } catch (error) {
       console.log(error);
       toast.error("There is an error in creating Event");
+    } finally {
+      setIsPending(false);
     }
     setTime("");
     setCapacity(50);
@@ -165,8 +171,8 @@ export default function EventForm() {
           className="w-full"
         />
       </div>
-      <Button type="submit" className="w-full">
-        Submit
+      <Button type="submit" className="w-full" disabled={isPending}>
+        {isPending ? <SyncLoader color="#fff" /> : "Create Event"}
       </Button>
     </form>
   );

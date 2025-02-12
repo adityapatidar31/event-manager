@@ -22,6 +22,7 @@ import { formatDateTime } from "@/services/utils";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { BASE_URL, cookieSender } from "@/services/backend";
+import { SyncLoader } from "react-spinners";
 
 interface Event {
   _id: string;
@@ -60,6 +61,7 @@ export default function UpdateEventModal({
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
   const [image, setImage] = useState("");
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   useEffect(() => {
     if (eventData) {
@@ -95,6 +97,7 @@ export default function UpdateEventModal({
     };
 
     try {
+      setIsPending(true);
       await axios.patch(
         `${BASE_URL}api/v1/events/${eventData._id}`,
         updatedEvent,
@@ -106,6 +109,8 @@ export default function UpdateEventModal({
     } catch (error) {
       console.error("Error updating event:", error);
       toast.error("Failed to update event.");
+    } finally {
+      setIsPending(false);
     }
   }
 
@@ -211,10 +216,12 @@ export default function UpdateEventModal({
             />
           </div>
           <DialogFooter>
-            <Button variant="ghost" onClick={onClose}>
+            <Button variant="ghost" onClick={onClose} disabled={isPending}>
               Cancel
             </Button>
-            <Button type="submit">Update</Button>
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? <SyncLoader color="#fff" /> : "Login"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

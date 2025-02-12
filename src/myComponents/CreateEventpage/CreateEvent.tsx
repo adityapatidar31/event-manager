@@ -15,6 +15,7 @@ import { formatDateTime } from "@/services/utils";
 import { toast } from "react-toastify";
 import { createEvent } from "@/services/backend";
 import { SyncLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 export default function EventForm() {
   const [date, setDate] = useState<Date | undefined>();
@@ -27,7 +28,7 @@ export default function EventForm() {
   const [location, setLocation] = useState("");
   const [image, setImage] = useState("");
   const [isPending, setIsPending] = useState(false);
-
+  const navigate = useNavigate();
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     console.log({
@@ -59,6 +60,8 @@ export default function EventForm() {
     try {
       setIsPending(true);
       await createEvent(body);
+      toast.success("Event Created successfully!");
+      navigate("/");
     } catch (error) {
       console.log(error);
       toast.error("There is an error in creating Event");

@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import LoadingCardContainer from "../Homepage/LoadingCardContainer";
 import NoEvents from "./NoEvents";
+import { toast } from "react-toastify";
 
 interface Event {
   _id: string;
@@ -75,6 +76,7 @@ const MyEventComponent = () => {
       );
       setEvents(events.filter((event) => event._id !== deleteEventId));
       setDeleteEventId(null);
+      toast.success("Event Deleted successfully!");
     } catch (error) {
       console.error("Error deleting event:", error);
     }

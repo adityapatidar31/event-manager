@@ -23,6 +23,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { BASE_URL, cookieSender } from "@/services/backend";
 import { SyncLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 interface Event {
   _id: string;
@@ -62,7 +63,7 @@ export default function UpdateEventModal({
   const [location, setLocation] = useState("");
   const [image, setImage] = useState("");
   const [isPending, setIsPending] = useState<boolean>(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (eventData) {
       setName(eventData.name);
@@ -106,6 +107,7 @@ export default function UpdateEventModal({
       toast.success("Event updated successfully!");
       onUpdateSuccess();
       onClose();
+      navigate("/");
     } catch (error) {
       console.error("Error updating event:", error);
       toast.error("Failed to update event.");

@@ -73,7 +73,7 @@ export default function Navbar() {
                 {user.name ? (
                   <>
                     <Link to="/myEvents">
-                      <DropdownMenuItem>myEvents</DropdownMenuItem>
+                      <DropdownMenuItem>My Events</DropdownMenuItem>
                     </Link>
                     <Link to="/createEvent">
                       <DropdownMenuItem>Create Event</DropdownMenuItem>

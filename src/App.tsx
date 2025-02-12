@@ -7,11 +7,11 @@ import { ToastContainer } from "react-toastify";
 import HeroSection from "./myComponents/Heropage/Hero";
 import Homepage from "./myComponents/Homepage/page";
 import Eventpage from "./myComponents/Eventpage/Eventpage";
-import MyEvents from "./myComponents/MyEventspage/MyEvents";
 import Aboutpage from "./myComponents/Aboutpage/Aboutpage";
 import CreateEvent from "./myComponents/CreateEventpage/CreateEvent";
 import Loginpage from "./myComponents/Loginpage/Loginpage";
 import SignupPage from "./myComponents/SignupPage/SignupPage";
+import MyEventComponent from "./myComponents/MyEventspage/MyEvents";
 
 function Layout() {
   return (
@@ -53,7 +53,7 @@ export default function App() {
             <Route path="" element={<Homepage />} />
             {/* The dynamic route is defined as :id */}
             <Route path="/:id" element={<Eventpage />} />
-            <Route path="/myEvent" element={<MyEvents />} />
+            <Route path="/myEvent" element={<MyEventComponent />} />
             <Route path="/about" element={<Aboutpage />} />
             <Route path="/createEvent" element={<CreateEvent />} />
           </Route>

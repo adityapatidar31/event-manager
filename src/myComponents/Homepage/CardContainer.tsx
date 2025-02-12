@@ -197,7 +197,7 @@ function CardContainer() {
                 <Button
                   className="mt-4 w-full"
                   onClick={() => {
-                    navigate("/");
+                    navigate("/login");
                   }}
                 >
                   Login

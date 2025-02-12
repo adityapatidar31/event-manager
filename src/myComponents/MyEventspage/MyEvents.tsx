@@ -20,6 +20,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import LoadingCardContainer from "../Homepage/LoadingCardContainer";
+import NoEvents from "./NoEvents";
 
 interface Event {
   _id: string;
@@ -92,7 +93,7 @@ const MyEventComponent = () => {
       {loading ? (
         <LoadingCardContainer />
       ) : events.length === 0 ? (
-        <p className="text-gray-500">You haven't created any events yet.</p>
+        <NoEvents />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {events.map((event) => (

@@ -106,8 +106,8 @@ export default function UpdateEventModal({
       );
       toast.success("Event updated successfully!");
       onUpdateSuccess();
-      onClose();
       navigate("/");
+      onClose();
     } catch (error) {
       console.error("Error updating event:", error);
       toast.error("Failed to update event.");

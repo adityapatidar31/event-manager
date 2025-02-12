@@ -66,6 +66,7 @@ const MyEventComponent = () => {
   const handleDeleteEvent = async () => {
     if (!deleteEventId) return;
 
+    setLoading(true);
     try {
       await axios.delete(
         `${BASE_URL}api/v1/events/${deleteEventId}`,
@@ -76,6 +77,7 @@ const MyEventComponent = () => {
     } catch (error) {
       console.error("Error deleting event:", error);
     }
+    setLoading(false);
   };
 
   const handleOpenUpdateModal = (event: Event) => {
@@ -159,12 +161,16 @@ const MyEventComponent = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setDeleteEventId(null)}>
+            <AlertDialogCancel
+              onClick={() => setDeleteEventId(null)}
+              disabled={loading}
+            >
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteEvent}
               className="bg-red-500 hover:bg-red-600"
+              disabled={loading}
             >
               Delete
             </AlertDialogAction>

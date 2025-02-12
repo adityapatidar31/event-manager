@@ -220,7 +220,7 @@ export default function UpdateEventModal({
               Cancel
             </Button>
             <Button type="submit" className="w-full" disabled={isPending}>
-              {isPending ? <SyncLoader color="#fff" /> : "Login"}
+              {isPending ? <SyncLoader color="#fff" /> : "Update Event"}
             </Button>
           </DialogFooter>
         </form>
